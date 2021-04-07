@@ -13,7 +13,7 @@ namespace DomainByAssessment.Console
     {
         static void Main()
         {
-            var sources = new ConcurrentBag<(string, string)>() { ("INTERFAX", "https://interfax.by/news/feed/"), ("HABR", "https://habr.com/ru/rss/all/all/") };
+            var sources = new List<(string, string)>() { ("INTERFAX", "https://interfax.by/news/feed/"), ("HABR", "https://habr.com/ru/rss/all/all/") };
 
             var providerUrlFeeds = new ConcurrentBag<(string, string, SyndicationFeed)>();
 
@@ -46,6 +46,7 @@ namespace DomainByAssessment.Console
                         Guid = Guid.NewGuid(),
                         ExternalUrlId = i.Id,
                         Title = i.Title.Text,
+                        PublishDateTimeOffset = i.PublishDate,
                         Summary = i.Summary.Text
                     }));
                 System.Console.WriteLine($"News received count for {feed.Item1}: {feed.Item3.Items.Count()};");
