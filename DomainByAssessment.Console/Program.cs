@@ -37,7 +37,9 @@ namespace DomainByAssessment.Console
             foreach (var feed in providerUrlFeeds)
             {
                 var freshNewsItemsSummaries = feed.Item3.Items.Select(i => i.Summary.Text).Except(ctx.NewsItems.Where(i => i.Feed.ProviderName == feed.Item1).Select(i => i.Summary));
-                ctx.NewsItems.AddRange(feed.Item3.Items.Select(i => new NewsItem() { Feed = ctx.Feeds.Single(f => f.Title == feed.Item3.Title.Text), Guid = Guid.NewGuid(), Summary = i.Summary.Text }));
+                ctx.NewsItems.AddRange(feed.Item3.Items
+                    .Where(i => freshNewsItemsSummaries.Contains(i.Summary.Text))
+                    .Select(i => new NewsItem() { Feed = ctx.Feeds.Single(f => f.Title == feed.Item3.Title.Text), Guid = Guid.NewGuid(), Summary = i.Summary.Text }));
                 System.Console.WriteLine($"News received count for {feed.Item1}: {feed.Item3.Items.Count()};");
                 System.Console.WriteLine($"News saved count for {feed.Item1}: {ctx.SaveChanges()};");
             }
