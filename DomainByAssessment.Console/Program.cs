@@ -37,7 +37,7 @@ namespace DomainByAssessment.Console
 
             foreach (var feed in providerUrlFeeds)
             {
-                //TODO: optimize for not fetching all the items but querying on the db side instead
+                //TODO: optimize to avoid fetching all the items but querying on the db side instead
                 var freshNewsItemsSummaries = feed.Item3.Items.Select(i => i.Summary.Text).Except(ctx.NewsItems.Where(i => i.Feed.ProviderName == feed.Item1).Select(i => i.Summary));
                 ctx.NewsItems.AddRange(feed.Item3.Items
                     .Where(i => freshNewsItemsSummaries.Contains(i.Summary.Text))
