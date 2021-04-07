@@ -13,10 +13,11 @@ namespace DomainByAssessment.Console
     {
         static void Main()
         {
-            var sources = new ConcurrentBag<(string, string, SyndicationFeed)>() { ("INTERFAX", "https://interfax.by/news/feed/", null), ("HABR", "https://habr.com/ru/rss/all/all/", null) };
+            var sources = new ConcurrentBag<(string, string)>() { ("INTERFAX", "https://interfax.by/news/feed/"), ("HABR", "https://habr.com/ru/rss/all/all/") };
 
             var providerUrlFeeds = new ConcurrentBag<(string, string, SyndicationFeed)>();
 
+            // I've got obvious knowledge gaps of AggregateException handling, so skipping it
             sources.AsParallel().ForAll(p =>
             {
                 using var reader = XmlReader.Create(p.Item2);
