@@ -31,14 +31,14 @@ namespace DomainByAssessment.Console
             //ensure feed providers are added to the db
             if (provider_Url_Feeds.Select(f => f.Item1).Except(ctx.Feeds.Select(f => f.ProviderName)).Any())
             {
-                //TODO:fix adding all the feeds but filter out only missing ones in db
+                //TODO:fix this bug of adding all the feeds to filter out only missing ones in db. otherwise adding new rss provider will lead to collisions
                 ctx.Feeds.AddRange(provider_Url_Feeds.Select(f => new RssFeed() { ProviderName = f.Item1, Title = f.Item3.Title.Text }));
                 ctx.SaveChanges();
             }
 
             foreach (var provider_Url_Feed in provider_Url_Feeds)
             {
-                //TODO: optimize to avoid fetching all the items but query on the db side instead
+                //TODO: optimize to avoid fetching all the items but query on the db side instead. sql profiling required.
                 var freshNewsItemsSummaries = provider_Url_Feed.Item3.Items.Select(i => i.Summary.Text).Except(ctx.NewsItems.Where(i => i.Feed.ProviderName == provider_Url_Feed.Item1).Select(i => i.Summary));
                 ctx.NewsItems.AddRange(provider_Url_Feed.Item3.Items
                     .Where(i => freshNewsItemsSummaries.Contains(i.Summary.Text))
