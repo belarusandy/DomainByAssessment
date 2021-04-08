@@ -31,6 +31,7 @@ namespace DomainByAssessment.Console
             //ensure feed providers are added to the db
             if (providerUrlFeeds.Select(f => f.Item1).Except(ctx.Feeds.Select(f => f.ProviderName)).Any())
             {
+                //TODO:fix adding all the feeds but filter out only missing ones in db
                 ctx.Feeds.AddRange(providerUrlFeeds.Select(f => new RssFeed() { ProviderName = f.Item1, Title = f.Item3.Title.Text }));
                 ctx.SaveChanges();
             }
